@@ -23,7 +23,7 @@
 		<script>
 			var options = {
 			  enableHighAccuracy: true,
-			  timeout: 10000,
+			  timeout: 5000,
 			  maximumAge: 0
 			};
 
@@ -42,7 +42,7 @@
 			};
 
 			navigator.geolocation.getCurrentPosition(success,error,options);
-			setInterval(function(){navigator.geolocation.getCurrentPosition(success,error,options);}, 60000);
+			setInterval(function(){navigator.geolocation.getCurrentPosition(success,error,options);}, 5000);
 		</script>
 	</body>
 </html>
