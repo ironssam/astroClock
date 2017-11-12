@@ -1,316 +1,42 @@
+<!-- https://github.com/mourner/suncalc helped me do this. -->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
 		<link rel="stylesheet" href="style.css"/>
-		<script src="suncalc.js"></script>
+		<title>Solar clock</title>
 	</head>
 	<body>
 		<div class="container">
 			<canvas id="clock" width="500" height="500"></canvas>
 		</div>
+		<script src="js/suncalc.js"></script>
+		<script src="js/highschoolmath.js"></script>
+		<script src="js/drawmoonstroke.js"></script>
+		<script src="js/drawMarker.js"></script>
+		<script src="js/drawsolarclockfields.js"></script>
+		<script src="js/drawmoonphase.js"></script>
+		<script src="js/drawNumbers.js"></script>
+		<script src="js/drawTime.js"></script>
+		<script src="js/centerCanvas.js"></script>
+		<script src="js/drawKickAssClock.js"></script>
 		<script>
 			var options = {
 			  enableHighAccuracy: true,
-			  timeout: 5000,
+			  timeout: 10000,
 			  maximumAge: 0
 			};
 
 			function success(pos) {
-				// get lat long based on browser's geolocation
+				// Get lat long based on browser's geolocation
 				var crd = pos.coords;
-				// get today's sunlight times
-				var times = SunCalc.getTimes(new Date(), crd.latitude, crd.longitude);
-				// get today's moonlight times
-				var moontimes = SunCalc.getMoonTimes(new Date(), crd.latitude, crd.longitude);
-				console.log(pos.coords);
-				console.log(times);
-				console.log(moontimes);
-
-				var canvas = document.getElementById("clock");
-				var center = centerCanvas(canvas);
-				var ctx = canvas.getContext("2d");
-				// Stroke reference
-				var numbersMinor = 3;
-				var numbersMiddle = 7;
-				var numbersMajor = 9;
-				var markerWidth = numbersMajor;
-				var radius = center*.75;
-				var markerRadius = center*.9;
-				var moonRadius = radius+(.5*(numbersMinor+numbersMinor+markerWidth));
-
-				// change times to degrees on the clock face
-				var sunriseAngle = timeToRadians(times.sunrise);
-				var sunsetAngle = timeToRadians(times.sunset);
-				var solarNoonAngle = timeToRadians(times.solarNoon);
-				var midnightAngle = timeToRadians(times.nadir);
-				var nightStartAngle = timeToRadians(times.night);
-				var nightEndAngle = timeToRadians(times.nightEnd);
-				var twilightStartAngle = timeToRadians(times.dusk);
-				var twilightEndAngle = timeToRadians(times.dawn);
-				var goldenHourStartAngle = timeToRadians(times.goldenHourEnd);
-				var goldenHourEndAngle = timeToRadians(times.goldenHour);
-				var moonriseAngle = timeToRadians(moontimes.rise);
-				var moonsetAngle = timeToRadians(moontimes.set);
-
-				// get x, y for quadratic angles
-				var sunriseX = angleToX(sunriseAngle, radius);
-      			var sunriseY = angleToY(sunriseAngle, radius);
-      			var nightStartX = angleToX(nightStartAngle, radius);
-      			var nightStartY = angleToY(nightStartAngle, radius);
-      			var twilightStartX = angleToX(twilightStartAngle, radius);
-      			var twilightStartY = angleToY(twilightStartAngle, radius);
-      			var goldenHourStartX = angleToX(goldenHourStartAngle, radius);
-      			var goldenHourStartY = angleToY(goldenHourStartAngle, radius);
-      			var midnightX = angleToX(midnightAngle, radius);
-      			var midnightY = angleToY(midnightAngle, radius);
-      			var solarNoonX = angleToX(solarNoonAngle, radius*.23);
-      			var solarNoonY = angleToY(solarNoonAngle, radius*.23);
-      			console.log(solarNoonX + ", " + solarNoonY);
-
-				// Colors reference
-				var black = 'rgba(0,0,0,1)';
-				var white = 'rgba(255,255,255,1)';
-				var faceOverlay = 'rgba(255,255,255,0)';
-				var dayColor = 'rgba(255,244,203,1)';
-				var goldenHourColor = 'rgba(246,173,158,1)';
-				var sunriseSetColor = 'rgba(229,122,166,1)';
-				var twilightColor = 'rgba(166,79,176,1)';
-				var nightColor = 'rgba(99,49,162,1)';
-				var moonColor = 'rgba(127,127,127,1)';
-				// move to center point
-				ctx.translate(center, center);
-
-      			drawclockfill(radius, dayColor);
-      			drawgoldenhourfill(goldenHourColor);
-      			drawsunrisesetfill(sunriseSetColor);
-      			drawtwilightfill(twilightColor);
-      			drawnightfill(nightColor);
-      			drawmoonstroke(moonriseAngle, moonsetAngle, moonRadius, moonColor, numbersMajor, 'square');
-      			drawMarker(ctx, solarNoonAngle, radius, markerWidth, 'butt', dayColor);
-      			drawMarker(ctx, solarNoonAngle-1.0472, radius, markerWidth, 'butt', black);
-      			drawMarker(ctx, solarNoonAngle+1.0472, radius, markerWidth, 'butt', black);
-      			drawclockfill(faceOverlay);
-      			drawgoldenhourstroke(numbersMinor, black);
-      			drawsunrisesetstroke(numbersMiddle, black);
-      			drawtwilightstroke(numbersMinor, black);
-      			drawnightstroke(numbersMinor, black);
-      			drawNumbers(ctx, markerRadius, numbersMinor, numbersMajor, numbersMinor+numbersMinor+markerWidth, numbersMinor+numbersMinor+markerWidth, 'butt', black);
-      			drawclockstroke(radius, numbersMajor-1, black);
-      			drawclockstroke(markerRadius+numbersMinor+numbersMinor+markerWidth, numbersMinor, black);
-      			drawTime(ctx, markerRadius, numbersMajor);
-
-      			function drawclockfill(radius, color) {
-      				ctx.fillStyle = color;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
-	      			ctx.fill();
-	      			ctx.closePath();
-      			}
-
-      			function drawclockstroke(radius, width, color) {
-      				ctx.strokeStyle = color;
-      				ctx.lineWidth = width;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
-	      			ctx.stroke();
-	      			ctx.closePath();
-      			}
-
-      			function drawmoonstroke(rise, set, radius, color, width, cap) {
-      				ctx.strokeStyle = color;
-      				ctx.lineWidth = width;
-      				ctx.lineCap = cap;
-      				ctx.beginPath();
-      				ctx.arc(0,0,radius,rise,set);
-      				ctx.stroke();
-      				ctx.closePath();
-      			}
-
-      			function drawgoldenhourfill(color) {
-	      			ctx.fillStyle = color;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, goldenHourStartAngle, goldenHourEndAngle, true);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, goldenHourStartX, goldenHourStartY);
-	      			console.log(solarNoonX + ", " + solarNoonY);
-	      			ctx.fill();
-	      			ctx.closePath();
-      			}
-
-      			function drawgoldenhourstroke(strokeWidth, color) {
-	      			ctx.strokeStyle = color;
-	      			ctx.lineWidth = strokeWidth;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, goldenHourStartAngle, goldenHourEndAngle, true);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, goldenHourStartX, goldenHourStartY);
-	      			ctx.stroke();
-	      			ctx.closePath();
-      			}
-
-      			function drawsunrisesetfill(color) {
-	      			ctx.fillStyle = color;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, sunriseAngle, sunsetAngle, true);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, sunriseX, sunriseY);
-	      			ctx.fill();
-	      			ctx.closePath();
-	      		}
-
-	      		function drawsunrisesetstroke(strokeWidth, color) {
-	      			ctx.strokeStyle = color;
-	      			ctx.lineWidth = strokeWidth;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, sunriseAngle, sunsetAngle, true);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, sunriseX, sunriseY);
-	      			ctx.stroke();
-	      			ctx.closePath();
-	      		}
-
-      			function drawtwilightfill(color) {
-	      			ctx.fillStyle = color;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, twilightStartAngle, twilightEndAngle, false);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, twilightStartX, twilightStartY);
-	      			ctx.fill();
-	      			ctx.closePath();
-      			}
-
-      			function drawtwilightstroke(strokeWidth, color) {
-	      			ctx.strokeStyle = color;
-	      			ctx.lineWidth = strokeWidth;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, twilightStartAngle, twilightEndAngle, false);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, twilightStartX, twilightStartY);
-	      			ctx.stroke();
-	      			ctx.closePath();
-      			}
-
-      			function drawnightfill(color) {
-	      			ctx.fillStyle = color;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, nightStartAngle, nightEndAngle, false);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, nightStartX, nightStartY);
-	      			ctx.fill();
-	      			ctx.closePath();
-	      		}
-
-	      		function drawnightstroke(strokeWidth, color) {
-	      			ctx.strokeStyle = color;
-	      			ctx.lineWidth = strokeWidth;
-	      			ctx.beginPath();
-	      			ctx.arc(0, 0, radius, nightStartAngle, nightEndAngle, false);
-	      			ctx.quadraticCurveTo(solarNoonX, solarNoonY, nightStartX, nightStartY);
-	      			ctx.stroke();
-	      			ctx.closePath();
-	      		}
-
-	      		function drawNumbers(ctx, radius, width1, width2, minorLength, majorLength, cap, color) {
-				    ctx.strokeStyle = color;
-				    ctx.lineCap = cap;
-				    for (var a=0,aMax=(2*Math.PI),aStep=(Math.PI/12); a<aMax; a+=aStep){
-					    var px1 = Math.sin(a)*radius;
-					    var py1 = Math.cos(a)*radius;
-					    var px2 = Math.sin(a)*(radius+minorLength);
-					    var py2 = Math.cos(a)*(radius+minorLength);
-					    ctx.lineWidth = width1;
-					    ctx.beginPath();
-					    ctx.moveTo(px1, py1);
-					    ctx.lineTo(px2, py2);
-					    ctx.stroke();
-						ctx.closePath();
-					};
-					for (var a=0,aMax=(2*Math.PI),aStep=(Math.PI/4); a<aMax; a+=aStep){
-					    var px1 = Math.sin(a)*radius;
-					    var py1 = Math.cos(a)*radius;
-					    var px2 = Math.sin(a)*(radius+majorLength);
-					    var py2 = Math.cos(a)*(radius+majorLength);
-					    ctx.lineWidth = width2;
-					    ctx.beginPath();
-					    ctx.moveTo(px1, py1);
-					    ctx.lineTo(px2, py2);
-					    ctx.stroke();
-						ctx.closePath();
-					};
-				}
-
-				function drawMarker(ctx, angle, radius, width, cap, color) {
-				    ctx.lineCap = cap;
-				    ctx.lineWidth = width;
-				    ctx.strokeStyle = color;
-				    var px1 = Math.cos(angle)*radius;
-				    var py1 = Math.sin(angle)*radius;
-				    var px2 = Math.cos(angle)*(radius+10);
-				    var py2 = Math.sin(angle)*(radius+10);
-				    ctx.beginPath();
-				    ctx.moveTo(px1,py1);
-				    ctx.lineTo(px2,py2);
-				    ctx.stroke();
-				    ctx.closePath();
-				}
-
-				function drawTime(ctx, radius, width){
-				    var now = new Date();
-				    var hour = now.getHours();
-				    var minute = now.getMinutes();
-				    var second = now.getSeconds();
-				    // hand
-				    var nowSec = (hour*60*60) + (minute*60) + second;
-				    var oneSecAngle = (360/86400) * (Math.PI/180);
-				    var nowSecAngle = nowSec * oneSecAngle;
-				    drawHand(ctx, nowSecAngle, radius, width);
-				}
-
-				function drawHand(ctx, pos, length, width) {
-					ctx.rotate(1*Math.PI);
-				    ctx.beginPath();
-				    ctx.lineWidth = width;
-				    ctx.lineCap = "butt";
-				    ctx.strokeStyle = 'rgba(0,0,0,1)';
-				    ctx.moveTo(0,0);
-				    ctx.rotate(pos);
-				    ctx.lineTo(0, -length);
-				    ctx.stroke();
-				    ctx.rotate(-pos);
-				}
-			};
+				drawKickAssClock(crd);
+			}
 
 			function error(err) {
 			  console.warn(`ERROR(${err.code}): ${err.message}`);
 			};
 
-			// Plot times on a 24 hour circle
-			function timeToRadians(date) {
-				var h = date.getHours();
-				var m = date.getMinutes();
-				var s = date.getSeconds();
-				var angle = (((h/24)+(m/24/60)+(s/24/60/60))*2*Math.PI)+(.5*Math.PI);
-				return angle;
-			}
-
-			function angleToX(angle, radius) {
-				var theta = angle;
-				var x = Math.cos(theta) * radius;
-				console.log(angle + ", " + radius);
-				return x;
-			}
-
-			function angleToY(angle, radius) {
-				var theta = angle;
-				var y = Math.sin(theta) * radius;
-				return y;
-			}
-
-			// Get canvas center
-			function centerCanvas(canvas) {
-				var canvasWidth = canvas.width;
-				var canvasHeight = canvas.height;
-				if (canvasWidth > canvasHeight) {
-					var center = canvasHeight/2;
-				} else {
-					var center = canvasWidth/2;
-				}
-				return center;
-			}
 			navigator.geolocation.getCurrentPosition(success,error,options);
 		</script>
 	</body>
