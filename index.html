@@ -37,7 +37,7 @@
 			  console.warn(`ERROR(${err.code}): ${err.message}`);
 			};
 
-			navigator.geolocation.getCurrentPosition(success,error,options);
+			setInterval(function(){navigator.geolocation.getCurrentPosition(success,error,options);}, 1000);
 		</script>
 	</body>
 </html>
