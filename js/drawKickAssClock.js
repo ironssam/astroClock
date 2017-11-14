@@ -1,12 +1,14 @@
 function drawKickAssClock (position) {
+	var today = new Date();
 	// Today's sun info
-	var times = SunCalc.getTimes(new Date(), position.latitude, position.longitude);
-	var offset = times.nadir.getTimezoneOffset();
+	var times = SunCalc.getTimes(today, position.latitude, position.longitude);
+	console.log(times);
+	var offset = today.getTimezoneOffset();
 	console.log(offset);
 
 	// Today's moon info
-	var moontimes = SunCalc.getMoonTimes(new Date(), position.latitude, position.longitude);
-	var moonface = SunCalc.getMoonIllumination(new Date());
+	var moontimes = SunCalc.getMoonTimes(today, position.latitude, position.longitude);
+	var moonface = SunCalc.getMoonIllumination(today);
 	var up = Boolean(moontimes.alwaysUp);
 	var down = Boolean(moontimes.alwaysDown);
 
