@@ -11,12 +11,11 @@ function angleToY(angle, radius) {
 }
 
 // Plot times on a 24 hour circle
-function timeToRadians(date, offset) {
+function timeToRadians(date) {
 	var h = date.getHours();
 	var m = date.getMinutes();
 	var s = date.getSeconds();
 	var angle = (((h/24)+(m/24/60)+(s/24/60/60))*(2*Math.PI))+(.5*Math.PI);
-	console.log(angle);
 	return angle;
 }
 
