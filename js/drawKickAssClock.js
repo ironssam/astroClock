@@ -1,10 +1,9 @@
 function drawKickAssClock (position) {
 	var today = new Date();
+	var offset = today.getTimezoneOffset();
+
 	// Today's sun info
 	var times = SunCalc.getTimes(today, position.latitude, position.longitude);
-	console.log(times);
-	var offset = today.getTimezoneOffset();
-	console.log(offset);
 
 	// Today's moon info
 	var moontimes = SunCalc.getMoonTimes(today, position.latitude, position.longitude);
@@ -52,10 +51,10 @@ function drawKickAssClock (position) {
 
 	// Fill the sun clock
 	drawcircle(ctx, radius, center, numbersMajor, black, dayColor, 'fill');
-	drawsolarclockfields(ctx, radius, center, goldenHourEndAngle, goldenHourStartAngle, solarNoonAngle, numbersMinor, black, goldenHourColor, 'fill');
-	drawsolarclockfields(ctx, radius, center, sunsetAngle, sunriseAngle, solarNoonAngle, numbersMiddle, black, sunriseSetColor, 'fill');
-	drawsolarclockfields(ctx, radius, center, twilightStartAngle, twilightEndAngle, solarNoonAngle, numbersMinor, black, twilightColor, 'fill');
-	drawsolarclockfields(ctx, radius, center, nightStartAngle, nightEndAngle, solarNoonAngle, numbersMinor, black, nightColor, 'fill');
+	drawsolarclockfields(ctx, radius, center, goldenHourEndAngle, goldenHourStartAngle, numbersMinor, black, goldenHourColor, 'fill');
+	drawsolarclockfields(ctx, radius, center, sunsetAngle, sunriseAngle, numbersMiddle, black, sunriseSetColor, 'fill');
+	drawsolarclockfields(ctx, radius, center, twilightStartAngle, twilightEndAngle, numbersMinor, black, twilightColor, 'fill');
+	drawsolarclockfields(ctx, radius, center, nightStartAngle, nightEndAngle, numbersMinor, black, nightColor, 'fill');
 
 	// Indicators
 	drawMarker(ctx, center, solarNoonAngle, radius, markerWidth, 12, 'butt', dayColor); //Solar noon indicator
@@ -63,10 +62,10 @@ function drawKickAssClock (position) {
 	drawMarker(ctx, center, solarNoonAngle+1.0472, radius, markerWidth, 12, 'butt', black);
 
 	// Stroke the sun clock
-	drawsolarclockfields(ctx, radius, center, goldenHourEndAngle, goldenHourStartAngle, solarNoonAngle, numbersMinor, black, goldenHourColor, 'stroke');
-	drawsolarclockfields(ctx, radius, center, sunsetAngle, sunriseAngle, solarNoonAngle, numbersMiddle, black, sunriseSetColor, 'stroke');
-	drawsolarclockfields(ctx, radius, center, twilightStartAngle, twilightEndAngle, solarNoonAngle, numbersMinor, black, twilightColor, 'stroke');
-	drawsolarclockfields(ctx, radius, center, nightStartAngle, nightEndAngle, solarNoonAngle, numbersMinor, black, nightColor, 'stroke');
+	drawsolarclockfields(ctx, radius, center, goldenHourEndAngle, goldenHourStartAngle, numbersMinor, black, goldenHourColor, 'stroke');
+	drawsolarclockfields(ctx, radius, center, sunsetAngle, sunriseAngle, numbersMiddle, black, sunriseSetColor, 'stroke');
+	drawsolarclockfields(ctx, radius, center, twilightStartAngle, twilightEndAngle, numbersMinor, black, twilightColor, 'stroke');
+	drawsolarclockfields(ctx, radius, center, nightStartAngle, nightEndAngle, numbersMinor, black, nightColor, 'stroke');
 
 	// 24 hour clock hour indicators
 	drawNumbers(ctx, center, markerRadius, numbersMinor, numbersMinor, numbersMajor*1.5, numbersMajor*2, 'butt', black);
