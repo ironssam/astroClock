@@ -19,11 +19,11 @@ function timeToRadians(date) {
 	return angle;
 }
 
-function drawcircle(canvas, radius, center, strokeWidth, strokeColor, fillColor, treatment) {
+function drawcircle(canvas, radius, centerX, centerY, strokeWidth, strokeColor, fillColor, treatment) {
 	canvas.fillStyle = fillColor;
 	canvas.strokeStyle = strokeColor;
 	canvas.lineWidth = strokeWidth;
-	canvas.translate(center, center);
+	canvas.translate(centerY, centerX);
 	canvas.beginPath();
 	canvas.arc(0, 0, radius, 0, 2 * Math.PI, false);
 	if (treatment == 'stroke') {
@@ -35,5 +35,5 @@ function drawcircle(canvas, radius, center, strokeWidth, strokeColor, fillColor,
 		canvas.stroke();
 	}
 	canvas.closePath();
-	canvas.translate(-center, -center);
+	canvas.translate(-centerY, -centerX);
 }
