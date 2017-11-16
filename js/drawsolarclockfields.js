@@ -8,10 +8,13 @@ function drawsolarclockfields(canvas, radius, center, startAngle, endAngle, stro
 	canvas.beginPath();
 	canvas.arc(0, 0, radius, startAngle, endAngle, false);
 	canvas.quadraticCurveTo(0, 0, startAngleX, startAngleY);
-	if (treatment == 'stroke' || treatment == 'both') {
+	if (treatment == 'stroke') {
 		canvas.stroke();
-	} else if (treatment == 'fill' || treatment == 'both') {
+	} else if (treatment == 'fill') {
 		canvas.fill();
+	} else if (treatment == 'both') {
+		canvas.fill();
+		canvas.stroke();
 	}
 	canvas.closePath();
 	canvas.translate(-center, -center);

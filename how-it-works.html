@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="style.css"/>
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<article>
+			<h1>How to read the clock</h1>
+			<canvas id="clock" width="200" height="200"></canvas>
+		</article>
+		<script src="js/suncalc.js"></script>
+		<script src="js/highschoolmath.js"></script>
+		<script src="js/drawmoonstroke.js"></script>
+		<script src="js/drawMarker.js"></script>
+		<script src="js/drawsolarclockfields.js"></script>
+		<script src="js/drawmoonphase.js"></script>
+		<script src="js/drawNumbers.js"></script>
+		<script src="js/drawTime.js"></script>
+		<script src="js/centerCanvas.js"></script>
+		<script src="js/drawKickAssClock.js"></script>
+		<script>
+			var crd = {latitude:0, longitude:0, age:50, eyeColor:"blue"};
+			// Today's sun info
+			var times = SunCalc.getTimes(new Date(), 0, 0);
+
+			// Today's moon info
+			var moontimes = SunCalc.getMoonTimes(new Date(), 0, 0);
+			var moonface = SunCalc.getMoonIllumination(new Date());
+			var up = Boolean(moontimes.alwaysUp);
+			var down = Boolean(moontimes.alwaysDown);
+
+			var canvas = document.getElementById("clock");
+			var ctx = canvas.getContext("2d");
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			var center = centerCanvas(canvas);
+			drawKickAssClock(crd, canvas);
+		</script>
+	</body>
+</html>

@@ -1,7 +1,10 @@
 html{
 	background: #ccc;
 }
-.container {
-	margin: 125px auto;
-	width: 500px;
+body {
+	margin: 0 auto;
+	max-width: 50vw;
+}
+canvas {
+	margin: 1.5em auto;
 }
