@@ -1,10 +1,6 @@
-html{
-	background: #ccc;
-}
-body {
-	margin: 0 auto;
-	max-width: 50vw;
+html {
+	background: #fff8e5;
 }
 canvas {
-	margin: 1.5em auto;
+	margin: 1.5em;
 }

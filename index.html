@@ -10,7 +10,7 @@
 		<title>Solar clock</title>
 	</head>
 	<body>
-		<div class="container">
+		<div class="container" id="clockContainer">
 			<canvas id="clock"></canvas>
 		</div>
 		<nav>
@@ -43,9 +43,9 @@
 				var canvas = document.getElementById("clock");
 				var ctx = canvas.getContext("2d");
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				ctx.canvas.width  = window.innerWidth*.75;
-  				ctx.canvas.height = window.innerHeight*.75;
-				var center = centerCanvas(canvas);
+				ctx.canvas.width  = window.innerWidth*.9;
+  				ctx.canvas.height = window.innerHeight*.9;
+				document.getElementById('clockContainer').setAttribute("style","width:"+ctx.canvas.width+"px");
 				drawKickAssClock(crd, canvas);
 			}
 
