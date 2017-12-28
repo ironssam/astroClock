@@ -108,23 +108,30 @@ function drawKickAssClock (position) {
 		var moonriseAngle = 0+(.5*Math.PI);
 		var moonsetAngle = timeToRadians(moontimes.set);
 		var wtf = 'onlyset';
+		var moonriseSec = 0;
+		var moonsetSec = moontimes.set.getTime() / 1000;
 	} else if (moontimes.rise == null && moontimes.set == null) { // Always up or always down
 		var moonriseAngle = 0+(.5*Math.PI);
 		var moonsetAngle = 2*Math.PI+(.5*Math.PI);
 		var wtf = 'always';
+		var moonriseSec = 0;
+		var moonsetSec = 0;
 	} else if (moontimes.rise != null && moontimes.set == null) { // Rose today, sets tomorrow
 		var moonriseAngle = timeToRadians(moontimes.rise);
 		var moonsetAngle = 2*Math.PI+(.5*Math.PI);
 		var wtf = 'onlyrise';
+		var moonriseSec = moontimes.rise.getTime() / 1000;
+		var moonsetSec = 0;
 	}
 	else { // Rises today AND sets today
 		var moonriseAngle = timeToRadians(moontimes.rise);
 		var moonsetAngle = timeToRadians(moontimes.set);
 		var wtf = 'normal';
+		var moonriseSec = moontimes.rise.getTime() / 1000;
+		var moonsetSec = moontimes.set.getTime() / 1000;
 	}
 	// get UNIX timestamp to see which came first
-	var moonriseSec = moontimes.rise.getTime() / 1000;
-	var moonsetSec = moontimes.set.getTime() / 1000;
+
 
 
 	// Draw the moon stroke
